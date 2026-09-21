@@ -1,3 +1,9 @@
+/*This DockerLogCollector discovers running Docker containers,
+ continuously streams their stdout and stderr logs, parses those logs using LogParser,
+  and passes each parsed log to the logHandler for further alert processing. 
+  It also checks for new containers every 5 seconds and ignores 
+  the ResolveHub agent container itself.*/
+
 import Docker from "dockerode";
 import { LogParser, ParsedLog } from "../parser/LogParser";
 

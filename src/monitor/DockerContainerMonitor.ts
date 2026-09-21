@@ -1,6 +1,12 @@
 import Docker from "dockerode";
 
+/*This DockerContainerMonitor monitors running Docker containers every 5 seconds.
+ If a monitored container disappears, it waits for 2 minutes before triggering a "Container Stopped" firing alert.
+  When the container becomes available again, it automatically sends a "resolved" alert.
+ It also ignores the resolvehub-agent container itself. */
+
 import { MatchedAlert } from "../rules/AlertRuleEngine";
+import { AlertRule, defaultRules } from "../rules/defaultRules";
 
 export interface ContainerHealthHandler {
     (
@@ -22,7 +28,7 @@ export class DockerContainerMonitor {
     >();
 
     private readonly checkInterval = 5000;
-    private readonly failureThreshold = 10000;
+    private readonly failureThreshold = 120000;
 
     constructor(
         private readonly healthHandler: ContainerHealthHandler
@@ -123,16 +129,12 @@ export class DockerContainerMonitor {
     }
 
     private createContainerStoppedAlert(): MatchedAlert {
+        const rule = defaultRules.find(
+            (rule) => rule.name === "Container Stopped"
+        ) as AlertRule;
+
         return {
-            rule: {
-                name: "Container Stopped",
-                pattern: /container stopped|container exited|container has stopped/i,
-                priority: "P1",
-                severity: "CRITICAL",
-                summary: "Container stopped",
-                description:
-                    "A monitored container has been unavailable for more than 10 seconds.",
-            },
+            rule,
             log: {
                 timestamp: new Date().toISOString(),
                 stream: "stderr",

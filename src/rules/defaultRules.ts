@@ -336,4 +336,12 @@ export const defaultRules: AlertRule[] = [
     summary: "Slow Response Time",
     description: "Response time exceeded 2000ms",
 },
+{
+    name: "High CPU Usage",
+    pattern: /High CPU usage detected/i,
+    priority: "P2",
+    severity: "HIGH",
+    summary: "High CPU usage detected",
+    description: "High CPU usage was detected in the service logs.",
+},
 ];

@@ -1,3 +1,8 @@
+/*This ResolveHubClient sends detected alerts from the Docker Agent to the ResolveHub backend webhook. 
+It builds the webhook payload with the alert’s status, name, priority, severity, service, log details, and timestamps,
+ then sends it to the correct monitoring project using the configured integrationId;
+ if the backend rejects the request, it throws an error. */ 
+
 import { AgentConfig } from "../config/AgentConfig";
 import { MatchedAlert } from "../rules/AlertRuleEngine";
 

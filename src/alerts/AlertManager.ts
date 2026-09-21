@@ -1,3 +1,9 @@
+/*The AlertManager manages the lifecycle of alerts: when a rule is matched,
+  it sends a firing alert to ResolveHub; if the same alert keeps occurring, 
+ it avoids creating duplicate alerts by updating lastSeenAt; and if no matching 
+ log is received for 60 seconds, it automatically sends a resolved alert and removes 
+ it from the active alerts.*/
+
 import { MatchedAlert } from "../rules/AlertRuleEngine";
 import { ResolveHubClient } from "../webhook/ResolveHubClient";
 
@@ -10,7 +16,7 @@ interface ActiveAlert {
 
 export class AlertManager {
     private readonly activeAlerts = new Map<string, ActiveAlert>();
-    private readonly recoveryWindow = 60000;
+    private readonly recoveryWindow = 90000;
 
     constructor(
         private readonly resolveHubClient: ResolveHubClient

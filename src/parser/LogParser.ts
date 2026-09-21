@@ -1,3 +1,8 @@
+/* This LogParser converts the raw Docker log stream into structured log 
+objects by identifying whether each log came from stdout or stderr,
+ extracting the timestamp when available, and separating the actual log message. 
+It also uses a buffer to handle Docker log chunks that may arrive partially.*/ 
+
 export type LogStream = "stdout" | "stderr";
 
 export interface ParsedLog {
